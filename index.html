@@ -1,0 +1,184 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <title>Twologbook Notes</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body { font-family: 'Segoe UI', Arial, sans-serif; display: flex; min-height: 100vh; background-color: #f4f4f9; }
+        
+        .sidebar {
+            width: 260px;
+            background-color: #ffffff;
+            padding: 20px;
+            border-right: 1px solid #ddd;
+            box-shadow: 2px 0 5px rgba(0, 0, 0, 0.1);
+            overflow-y: auto;
+            height: 100vh;
+        }
+
+        .sidebar h2 {
+            font-size: 20px;
+            font-weight: bold;
+            margin-bottom: 20px;
+            color: #333;
+        }
+
+        .notes-list li {
+            padding: 10px;
+            cursor: pointer;
+            border-radius: 4px;
+            transition: background-color 0.3s;
+        }
+
+        .notes-list li:hover { background-color: #f0f0f0; }
+        .active { background-color: #e0e0e0; }
+
+        .content-area { flex-grow: 1; padding: 20px; overflow-y: auto; background-color: #fff; }
+        .note-title { font-size: 24px; color: #333; margin-bottom: 10px; }
+
+        .chapter {
+            font-size: 18px;
+            margin-top: 20px;
+            color: #555;
+            cursor: pointer;
+        }
+
+        .chapter-content {
+            padding: 10px;
+            background-color: #f9f9f9;
+            margin-bottom: 10px;
+            display: block;
+        }
+
+        .lang-switcher { position: absolute; top: 20px; right: 20px; z-index: 1000; }
+        .lang-select {
+            padding: 8px 15px;
+            border: 1px solid #ddd;
+            background: white;
+            cursor: pointer;
+        }
+    </style>
+</head>
+<body>
+    <div class="lang-switcher">
+        <select class="lang-select" onchange="changeLanguage(this.value)">
+            <option value="zh">中文</option>
+            <option value="en">EN</option>
+            <option value="ja">日本語</option>
+        </select>
+    </div>
+
+    <div class="sidebar">
+        <h2 id="notesDirectory">读书笔记目录</h2>
+        <ul class="notes-list" id="notesList"></ul>
+    </div>
+
+    <div class="content-area" id="contentArea">
+        <div id="chaptersContainer"></div>
+    </div>
+
+    <script>
+        const translations = {
+            'zh': {
+                'notesDirectory': '读书笔记目录',
+                'notes': {
+                    'note1': { title: '如何阅读一本书', chapters: [
+                        { title: '第一章：阅读的艺术', content: '阅读是一种技巧，需要不断练习。' },
+                        { title: '第二章：如何有效记笔记', content: '记笔记能帮助你理解和记忆。' }
+                    ] },
+                    'note2': { title: '人类简史', chapters: [
+                        { title: '第一章：人类的起源', content: '人类的历史可追溯至百万年前。' },
+                        { title: '第二章：农业革命', content: '农业改变了人类社会结构。' }
+                    ] }
+                }
+            },
+            'en': {
+                'notesDirectory': 'Reading Notes',
+                'notes': {
+                    'note1': { title: 'How to Read a Book', chapters: [
+                        { title: 'Chapter 1: The Art of Reading', content: 'Reading is a skill that requires practice.' },
+                        { title: 'Chapter 2: Effective Note-Taking', content: 'Taking notes enhances comprehension and memory.' }
+                    ] },
+                    'note2': { title: 'Sapiens', chapters: [
+                        { title: 'Chapter 1: The Origin of Humans', content: 'Human history dates back millions of years.' },
+                        { title: 'Chapter 2: Agricultural Revolution', content: 'Agriculture transformed human societies.' }
+                    ] }
+                }
+            },
+            'ja': {
+                'notesDirectory': '読書ノート一覧',
+                'notes': {
+                    'note1': { title: '本の読み方', chapters: [
+                        { title: '第1章：読書の技術', content: '読書はスキルであり、練習が必要です。' },
+                        { title: '第2章：効果的なメモの取り方', content: 'メモを取ることで理解と記憶が向上します。' }
+                    ] },
+                    'note2': { title: 'サピエンス全史', chapters: [
+                        { title: '第1章：人類の起源', content: '人類の歴史は何百万年前に遡ります。' },
+                        { title: '第2章：農業革命', content: '農業は人類社会を変革しました。' }
+                    ] }
+                }
+            }
+        };
+
+        let currentLang = 'zh';
+        let currentNote = 'note1';
+
+        function init() {
+            renderNotesList();
+            showNote(currentNote);
+        }
+
+        function renderNotesList() {
+            const list = document.getElementById('notesList');
+            const directoryTitle = document.getElementById('notesDirectory');
+            directoryTitle.innerText = translations[currentLang]['notesDirectory'];
+            
+            list.innerHTML = Object.keys(translations[currentLang]['notes']).map(noteId => `
+                <li onclick="showNote('${noteId}')">
+                    ${translations[currentLang]['notes'][noteId].title}
+                </li>
+            `).join('');
+        }
+
+        function changeLanguage(lang) {
+            currentLang = lang;
+            renderNotesList();
+            showNote(currentNote);
+        }
+
+        function showNote(noteId) {
+            currentNote = noteId;
+            const selectedNote = translations[currentLang]['notes'][currentNote];
+            const chaptersContainer = document.getElementById('chaptersContainer');
+            
+            chaptersContainer.innerHTML = `
+                <div class="note-title">${selectedNote.title}</div>
+                ${selectedNote.chapters.map((chapter, index) => `
+                    <div class="chapter" onclick="toggleContent(${index})">
+                        ${chapter.title} <span class="toggle-icon">▼</span>
+                    </div>
+                    <div class="chapter-content" id="chapterContent${index}">
+                        ${chapter.content}
+                    </div>
+                `).join('')}
+            `;
+        }
+
+        function toggleContent(index) {
+            const content = document.getElementById(`chapterContent${index}`);
+            const icon = document.querySelectorAll('.toggle-icon')[index];
+
+                if (content.style.display === 'none') {
+                    content.style.display = 'block';
+                    icon.innerText = '▼';
+                } else {
+                    content.style.display = 'none';
+                    icon.innerText = '▶';
+                }
+        }
+
+        window.onload = init;
+    </script>
+</body>
+</html>
