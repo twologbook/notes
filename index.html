@@ -4,6 +4,30 @@
     <meta charset="UTF-8">
     <title>Twologbook Notes</title>
     <style>
+        /* 新增内容显示相关样式 */
+        .chapter-content {
+            white-space: pre-wrap; /* 保留换行符 */
+            line-height: 1.6;
+            max-width: 800px;
+            margin: 0 auto;
+        }
+
+        /* 图片自适应样式 */
+        .chapter-content img {
+            max-width: 100%;
+            height: auto;
+            margin: 15px 0;
+            border-radius: 4px;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+        }
+
+        /* 新增代码块样式 */
+        .content-formatter {
+            padding: 15px;
+            background-color: #f9f9f9;
+            border-radius: 6px;
+            margin: 10px 0;
+        }
         * { margin: 0; padding: 0; box-sizing: border-box; }
         body { font-family: 'Segoe UI', Arial, sans-serif; display: flex; min-height: 100vh; background-color: #f4f4f9; }
         
@@ -79,52 +103,317 @@
     </div>
 
     <script>
+        
         const translations = {
-            'zh': {
-                'notesDirectory': '学习笔记目录',
-                'notes': {
-                    'note1': { title: '如何从会工作到会赚钱', chapters: [
-                        { title: '第一章：阅读的艺术', content: '阅读是一种技巧，需要不断练习。<br>键入内容键入内容键入内容键入内容键入内容键入内容键入内容键入内容键入内容键入内容键入内容键入内容键入内容键入内容<br>键入内容键入内容键入内容键入内容键入内容键入内容键入内容键入内容键入内容键入内容键入内容键入内容键入内容键入内容键入内容键入内容键入内容键入内容键入内容键入内容键入内容<br>键入内容键入内容键入内容键入内容键入内容' },
-                        { title: '第二章：如何有效记笔记', content: '记笔记能帮助你理解和记忆。' }
-                    ] },
-                    'note3': { title: '使用Mauns实现工作中xxxxxx的流程简化', chapters: [
-                        { title: '第一章：之前的工作流程', content: '繁琐的低效的重复的工作。' },
-                        { title: '第二章：希望改善的流程', content: '在xxxxx方面，可以进行改善。' },
-                        { title: '第三章：使用Mauns前的任务拆解', content: '对复杂的任务进行拆解，思考有什么自己好做机器不好做的地方， <br>对于数据进行预处理，降低出错率。'},
-                    ] },
-                    'note2': { title: '人类简史', chapters: [
-                        { title: '第一章：人类的起源', content: '人类的历史可追溯至百万年前。' },
-                        { title: '第二章：农业革命', content: '农业改变了人类社会结构。' }
-                    ] }
-                }
+    'zh': {
+        'notesDirectory': '读书笔记目录',
+        'notes': {
+            'note1': {
+                title: '如何从会工作到会赚钱',
+                chapters: [
+                    {
+                        title: '第一章：阅读的艺术',
+                        content: `阅读是一种技巧，需要不断练习。
+                        【图1】
+                        通过科学的训练方法，可以显著提升阅读速度。建议：
+                        - 每天保持30分钟专注阅读
+                        - 使用SQ3R阅读法
+                        - 定期复习笔记
+                        【图2】
+                        进阶技巧包括：
+                        1. 预读法快速筛选内容
+                        2. 关键词标记法
+                        3. 思维导图整理`
+                    },
+                    {
+                        title: '第二章：如何有效记笔记',
+                        content: `记笔记能帮助你理解和记忆。【图3】
+                        
+                        常用笔记方法：
+                        - 康奈尔笔记法
+                        - 思维导图法
+                        - 大纲笔记法`
+                    },
+                    {
+                        title: '第三章：时间管理',
+                        content: `高效的时间管理是成功的关键。【图4】
+                        
+                        推荐工具：
+                        - 番茄工作法
+                        - GTD（Getting Things Done）
+                        - 时间块管理法`
+                    }
+                ]
             },
-            'en': {
-                'notesDirectory': 'Learning Notes',
-                'notes': {
-                    'note1': { title: 'How to go from being able to work to being able to make money', chapters: [
-                        { title: 'Chapter 1: The Art of Reading', content: 'Reading is a skill that requires practice.' },
-                        { title: 'Chapter 2: Effective Note-Taking', content: 'Taking notes enhances comprehension and memory.' }
-                    ] },
-                    'note2': { title: 'Sapiens', chapters: [
-                        { title: 'Chapter 1: The Origin of Humans', content: 'Human history dates back millions of years.' },
-                        { title: 'Chapter 2: Agricultural Revolution', content: 'Agriculture transformed human societies.' }
-                    ] }
-                }
+            'note2': {
+                title: '人类简史',
+                chapters: [
+                    {
+                        title: '第一章：人类的起源',
+                        content: `人类的历史可追溯至百万年前。【图5】
+                        
+                        主要阶段：
+                        - 旧石器时代
+                        - 新石器时代
+                        - 农业革命`
+                    },
+                    {
+                        title: '第二章：农业革命',
+                        content: `农业改变了人类社会结构。【图6】
+                        
+                        影响：
+                        - 定居生活
+                        - 社会分层
+                        - 文明兴起`
+                    },
+                    {
+                        title: '第三章：工业革命',
+                        content: `工业革命带来了巨大的生产力提升。【图7】
+                        
+                        主要发明：
+                        - 蒸汽机
+                        - 纺织机
+                        - 铁路`
+                    }
+                ]
             },
-            'ja': {
-                'notesDirectory': '学習ノート一覧',
-                'notes': {
-                    'note1': { title: '働ける状態から稼げる状態になるまで', chapters: [
-                        { title: '第1章：読書の技術', content: '読書はスキルであり、練習が必要です。' },
-                        { title: '第2章：効果的なメモの取り方', content: 'メモを取ることで理解と記憶が向上します。' }
-                    ] },
-                    'note2': { title: 'サピエンス全史', chapters: [
-                        { title: '第1章：人類の起源', content: '人類の歴史は何百万年前に遡ります。' },
-                        { title: '第2章：農業革命', content: '農業は人類社会を変革しました。' }
-                    ] }
-                }
+            'note3': {
+                title: '使用Mauns实现工作流程简化',
+                chapters: [
+                    {
+                        title: '第一章：之前的工作流程',
+                        content: `繁琐的低效的重复的工作。【图8】
+                        
+                        问题：
+                        - 手动操作
+                        - 容易出错
+                        - 耗时`
+                    },
+                    {
+                        title: '第二章：希望改善的流程',
+                        content: `在xxxxx方面，可以进行改善。【图9】
+                        
+                        改进方向：
+                        - 自动化
+                        - 数据预处理
+                        - 错误检查`
+                    },
+                    {
+                        title: '第三章：使用Mauns前的任务拆解',
+                        content: `对复杂的任务进行拆解。【图10】
+                        
+                        步骤：
+                        1. 分析任务
+                        2. 识别难点
+                        3. 设计解决方案`
+                    }
+                ]
             }
-        };
+        }
+    },
+    'en': {
+        'notesDirectory': 'Learning Notes',
+        'notes': {
+            'note1': {
+                title: 'How to Go from Working to Earning',
+                chapters: [
+                    {
+                        title: 'Chapter 1: The Art of Reading',
+                        content: `Reading is a skill that requires practice.【图1】
+                        
+                        Tips to improve:
+                        - Read for 30 minutes daily
+                        - Use the SQ3R method
+                        - Review notes regularly`
+                    },
+                    {
+                        title: 'Chapter 2: Effective Note-Taking',
+                        content: `Taking notes enhances comprehension and memory.【图2】
+                        
+                        Popular methods:
+                        - Cornell Notes
+                        - Mind Mapping
+                        - Outline Method`
+                    },
+                    {
+                        title: 'Chapter 3: Time Management',
+                        content: `Efficient time management is key to success.【图3】
+                        
+                        Recommended tools:
+                        - Pomodoro Technique
+                        - GTD (Getting Things Done)
+                        - Time Blocking`
+                    }
+                ]
+            },
+            'note2': {
+                title: 'Sapiens: A Brief History of Humankind',
+                chapters: [
+                    {
+                        title: 'Chapter 1: The Origin of Humans',
+                        content: `Human history dates back millions of years.【图4】
+                        
+                        Key stages:
+                        - Paleolithic Era
+                        - Neolithic Era
+                        - Agricultural Revolution`
+                    },
+                    {
+                        title: 'Chapter 2: The Agricultural Revolution',
+                        content: `Agriculture transformed human societies.【图5】
+                        
+                        Impacts:
+                        - Settled life
+                        - Social stratification
+                        - Rise of civilizations`
+                    },
+                    {
+                        title: 'Chapter 3: The Industrial Revolution',
+                        content: `The Industrial Revolution brought massive productivity gains.【图6】
+                        
+                        Major inventions:
+                        - Steam engine
+                        - Spinning jenny
+                        - Railways`
+                    }
+                ]
+            },
+            'note3': {
+                title: 'Simplifying Workflows with Mauns',
+                chapters: [
+                    {
+                        title: 'Chapter 1: Previous Workflow',
+                        content: `Tedious, inefficient, and repetitive tasks.【图7】
+                        
+                        Issues:
+                        - Manual operations
+                        - Error-prone
+                        - Time-consuming`
+                    },
+                    {
+                        title: 'Chapter 2: Desired Improvements',
+                        content: `Areas for improvement in xxxxx.【图8】
+                        
+                        Directions:
+                        - Automation
+                        - Data preprocessing
+                        - Error checking`
+                    },
+                    {
+                        title: 'Chapter 3: Task Breakdown Before Using Mauns',
+                        content: `Breaking down complex tasks.【图9】
+                        
+                        Steps:
+                        1. Analyze the task
+                        2. Identify challenges
+                        3. Design solutions`
+                    }
+                ]
+            }
+        }
+    },
+    'ja': {
+        'notesDirectory': '学習ノート一覧',
+        'notes': {
+            'note1': {
+                title: '働ける状態から稼げる状態になるまで',
+                chapters: [
+                    {
+                        title: '第1章：読書の技術',
+                        content: `読書はスキルであり、練習が必要です。【図1】
+                        
+                        上達のコツ：
+                        - 毎日30分集中して読む
+                        - SQ3R法を使う
+                        - 定期的にノートを復習する`
+                    },
+                    {
+                        title: '第2章：効果的なメモの取り方',
+                        content: `メモを取ることで理解と記憶が向上します。【図2】
+                        
+                        一般的な方法：
+                        - コーネルノート法
+                        - マインドマップ
+                        - アウトライン法`
+                    },
+                    {
+                        title: '第3章：時間管理',
+                        content: `効率的な時間管理は成功の鍵です。【図3】
+                        
+                        おすすめのツール：
+                        - ポモドーロテクニック
+                        - GTD（Getting Things Done）
+                        - タイムブロッキング`
+                    }
+                ]
+            },
+            'note2': {
+                title: 'サピエンス全史',
+                chapters: [
+                    {
+                        title: '第1章：人類の起源',
+                        content: `人類の歴史は何百万年前に遡ります。【図4】
+                        
+                        主な段階：
+                        - 旧石器時代
+                        - 新石器時代
+                        - 農業革命`
+                    },
+                    {
+                        title: '第2章：農業革命',
+                        content: `農業は人類社会を変革しました。【図5】
+                        
+                        影響：
+                        - 定住生活
+                        - 社会階層
+                        - 文明の興隆`
+                    },
+                    {
+                        title: '第3章：産業革命',
+                        content: `産業革命は生産性を大幅に向上させました。【図6】
+                        
+                        主な発明：
+                        - 蒸気機関
+                        - 紡績機
+                        - 鉄道`
+                    }
+                ]
+            },
+            'note3': {
+                title: 'Maunsを使ったワークフローの簡素化',
+                chapters: [
+                    {
+                        title: '第1章：以前のワークフロー',
+                        content: `面倒で非効率的な繰り返し作業。【図7】
+                        
+                        問題点：
+                        - 手動操作
+                        - エラーが発生しやすい
+                        - 時間がかかる`
+                    },
+                    {
+                        title: '第2章：改善したい点',
+                        content: `xxxxxの分野で改善が可能です。【図8】
+                        
+                        改善方向：
+                        - 自動化
+                        - データの前処理
+                        - エラーチェック`
+                    },
+                    {
+                        title: '第3章：Mauns使用前のタスク分解',
+                        content: `複雑なタスクを分解します。【図9】
+                        
+                        手順：
+                        1. タスクを分析する
+                        2. 課題を特定する
+                        3. 解決策を設計する`
+                    }
+                ]
+            }
+        }
+    }
+};
 
         let currentLang = 'zh';
         let currentNote = 'note1';
@@ -152,6 +441,13 @@
             showNote(currentNote);
         }
 
+        function formatContent(content) {
+            return content
+                .replace(/【图(\d+)】/g, '<img src="picture/图$1.jpg">') // 图片简写语法
+                .replace(/\n/g, '<br>'); // 自动转换换行符
+        }
+
+        // 修改后的showNote函数
         function showNote(noteId) {
             currentNote = noteId;
             const selectedNote = translations[currentLang]['notes'][currentNote];
@@ -164,7 +460,9 @@
                         ${chapter.title} <span class="toggle-icon">▼</span>
                     </div>
                     <div class="chapter-content" id="chapterContent${index}">
-                        ${chapter.content}
+                        <div class="content-formatter">
+                            ${formatContent(chapter.content)}
+                        </div>
                     </div>
                 `).join('')}
             `;
