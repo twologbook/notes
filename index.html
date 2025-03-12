@@ -4,8 +4,116 @@
     <meta charset="UTF-8">
     <title>Twologbook Notes</title>
     <style>
-        /* 新增内容显示相关样式 */
-        .chapter-content {
+        /* 基础样式 */
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body { font-family: 'Segoe UI', Arial, sans-serif; display: flex; min-height: 100vh; background-color: #f4f4f9; }
+
+        /* 侧边栏样式 */
+        .sidebar {
+            width: 260px;
+            background-color: #ffffff;
+            padding: 20px;
+            border-right: 1px solid #ddd;
+            box-shadow: 2px 0 5px rgba(0, 0, 0, 0.1);
+            height: 100vh;
+            overflow-y: auto;
+            position: fixed;
+            left: 0;
+            top: 0;
+            transition: width 0.3s ease;
+        }
+
+        /* 折叠状态下的侧边栏 */
+        .sidebar.collapsed {
+            width: 0;
+            padding: 0;
+        }
+
+        .sidebar.collapsed .notes-list li {
+            text-align: center;
+            padding: 10px 0;
+        }
+
+        .sidebar.collapsed .notes-list li span {
+            display: none;
+        }
+
+        .sidebar.collapsed h2 {
+            display: none;
+        }
+
+        /* 折叠按钮 */
+        .collapse-btn {
+            position: fixed;
+            top: 0px;
+            left: 0;
+            background-color: #ffffff;
+            border: 1px solid #ddd;
+            border-radius: 0 50% 50% 0;
+            width: 30px;
+            height: 30px;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            box-shadow: 2px 2px 4px rgba(0, 0, 0, 0.1);
+            z-index: 1000;
+            transition: left 0.3s ease;
+        }
+
+        .sidebar.collapsed + .collapse-btn {
+            left: 0;
+        }
+
+        .collapse-btn:hover {
+            background-color: #f0f0f0;
+        }
+
+        /* 内容区域 */
+        .content-area {
+            flex-grow: 1;
+            padding: 20px;
+            margin-left: 260px;
+            transition: margin-left 0.3s ease;
+            background-color: #fff;
+            min-height: 100vh;
+        }
+        .note-title {
+            font-size: 24px; /* 改为 32px */
+            color: #333;
+            margin-bottom: 10px;
+        }
+
+        .chapter {
+            font-size: 18px; /* 改为 24px */
+            margin-top: 20px;
+            color: #555;
+            cursor: pointer;
+        }        
+
+        .sidebar.collapsed + .content-area {
+            margin-left: 60px;
+        }
+
+        /* 笔记列表 */
+        .notes-list li {
+            padding: 10px;
+            cursor: pointer;
+            border-radius: 4px;
+            transition: background-color 0.3s;
+            display: flex;
+            align-items: center;
+        }
+
+        .notes-list li:hover {
+            background-color: #f0f0f0;
+        }
+
+        .active {
+            background-color: #e0e0e0;
+        }
+    /* 新增内容显示相关样式 */
+         .chapter-content {
             white-space: pre-wrap; /* 保留换行符 */
             line-height: 1.6;
             max-width: 800px;
@@ -28,59 +136,38 @@
             border-radius: 6px;
             margin: 10px 0;
         }
-        * { margin: 0; padding: 0; box-sizing: border-box; }
-        body { font-family: 'Segoe UI', Arial, sans-serif; display: flex; min-height: 100vh; background-color: #f4f4f9; }
-        
-        .sidebar {
-            width: 260px;
-            background-color: #ffffff;
-            padding: 20px;
-            border-right: 1px solid #ddd;
-            box-shadow: 2px 0 5px rgba(0, 0, 0, 0.1);
-            overflow-y: auto;
-            height: 100vh;
+
+        /* 语言切换器 */
+        .lang-switcher {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            z-index: 1000;
         }
 
-        .sidebar h2 {
-            font-size: 20px;
-            font-weight: bold;
-            margin-bottom: 20px;
-            color: #333;
-        }
-
-        .notes-list li {
-            padding: 10px;
-            cursor: pointer;
-            border-radius: 4px;
-            transition: background-color 0.3s;
-        }
-
-        .notes-list li:hover { background-color: #f0f0f0; }
-        .active { background-color: #e0e0e0; }
-
-        .content-area { flex-grow: 1; padding: 20px; overflow-y: auto; background-color: #fff; }
-        .note-title { font-size: 24px; color: #333; margin-bottom: 10px; }
-
-        .chapter {
-            font-size: 18px;
-            margin-top: 20px;
-            color: #555;
-            cursor: pointer;
-        }
-
-        .chapter-content {
-            padding: 10px;
-            background-color: #f9f9f9;
-            margin-bottom: 10px;
-            display: block;
-        }
-
-        .lang-switcher { position: absolute; top: 20px; right: 20px; z-index: 1000; }
         .lang-select {
             padding: 8px 15px;
             border: 1px solid #ddd;
             background: white;
             cursor: pointer;
+        }
+        /* 调整段落和列表的间距 */
+        .content-formatter p {
+            margin: 0 0 10px 0; /* 下边距 10px，其他方向为 0 */
+            line-height: 1.6; /* 保持行高一致 */
+        }
+
+        /* 调整无序列表的样式 */
+        .content-formatter ul {
+            margin: 0 0 10px 0; /* 下边距 10px，其他方向为 0 */
+            padding-left: 20px; /* 左侧缩进 20px */
+            list-style-type: disc; /* 列表项前的圆点 */
+        }
+
+        /* 调整列表项的样式 */
+        .content-formatter ul li {
+            margin-bottom: 5px; /* 列表项之间的间距 */
+            line-height: 1.6; /* 保持行高一致 */
         }
     </style>
 </head>
@@ -93,17 +180,26 @@
         </select>
     </div>
 
-    <div class="sidebar">
-        <h2 id="notesDirectory">读书笔记目录</h2>
+    <!-- 侧边栏 -->
+    <div class="sidebar" id="sidebar">
+        <div class="collapse-btn" onclick="toggleSidebar()">&#9776;</div>
+        <h2 id="notesDirectory">学习笔记目录</h2>
         <ul class="notes-list" id="notesList"></ul>
     </div>
 
+    <!-- 内容区域 -->
     <div class="content-area" id="contentArea">
         <div id="chaptersContainer"></div>
     </div>
 
     <script>
-        
+
+         // 侧边栏折叠/展开功能
+        function toggleSidebar() {
+            const sidebar = document.getElementById('sidebar');
+            sidebar.classList.toggle('collapsed');
+        }
+
         const translations = {
     'zh': {
         'notesDirectory': '读书笔记目录',
@@ -115,6 +211,7 @@
                         title: '第一章：阅读的艺术',
                         content: `阅读是一种技巧，需要不断练习。
                         【图1】
+                        推荐阅读：【《学会读书》】(https://twologbook.github.io/notes/)，这是一本非常好的书。
                         通过科学的训练方法，可以显著提升阅读速度。建议：
                         - 每天保持30分钟专注阅读
                         - 使用SQ3R阅读法
@@ -137,7 +234,11 @@
                     {
                         title: '第三章：时间管理',
                         content: `高效的时间管理是成功的关键。【图4】
-                        
+                        关于挣钱：
+                            <ul><li><a href="https://example.com/1">标题1</a></li><li><a href="https://example.com/2">标题2</a></li><li><a href="https://example.com/3">标题3</a></li></ul>
+                            
+                        关于学习：
+                            <ul><li><a href="https://example.com/4">标题1</a></li><li><a href="https://example.com/5">标题2</a></li><li><a href="https://example.com/6">标题3</a></li></ul>
                         推荐工具：
                         - 番茄工作法
                         - GTD（Getting Things Done）
@@ -441,9 +542,19 @@
             showNote(currentNote);
         }
 
+        // 新增内容格式化函数
         function formatContent(content) {
             return content
                 .replace(/【图(\d+)】/g, '<img src="picture/图$1.jpg">') // 图片简写语法
+                .replace(/【(.+?)】\((https?:\/\/[^\s]+)\)/g, '<a href="$2"> $1 </a>') // 超链接简写语法
+                .replace(/关于(.+?)：\s*((?:标题\d+】\(https?:\/\/[^\s]+\)\s*)+)/g, (match, category, links) => {
+            // 解析链接
+            const listItems = links.trim().split(/\s+/).map(link => {
+                const [text, url] = link.match(/标题(\d+)】\((https?:\/\/[^\s]+)\)/).slice(1);
+                return `<li><a href="${url}">${category} 标题${text}</a></li>`;
+            }).join('');
+            return `<p>关于${category}：</p><ul>${listItems}</ul>`;
+        })
                 .replace(/\n/g, '<br>'); // 自动转换换行符
         }
 
@@ -467,6 +578,7 @@
                 `).join('')}
             `;
         }
+
 
         function toggleContent(index) {
             const content = document.getElementById(`chapterContent${index}`);
