@@ -3,6 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <title>Twologbook Notes</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
     <style>
         /* 基础样式 */
         * { margin: 0; padding: 0; box-sizing: border-box; }
@@ -42,27 +43,29 @@
             display: none;
         }
 
-        /* 折叠按钮 */
+        /* 折叠按钮 - 移到侧边栏内部 */
         .collapse-btn {
-            position: fixed;
-            top: 0px;
-            left: 0;
+            position: absolute;
+            top: 20px;
+            right: 20px;
             background-color: #ffffff;
             border: 1px solid #ddd;
-            border-radius: 0 50% 50% 0;
+            border-radius: 50%;
             width: 30px;
             height: 30px;
             cursor: pointer;
             display: flex;
             align-items: center;
             justify-content: center;
-            box-shadow: 2px 2px 4px rgba(0, 0, 0, 0.1);
+            box-shadow: 1px 1px 3px rgba(0, 0, 0, 0.1);
             z-index: 1000;
-            transition: left 0.3s ease;
         }
 
-        .sidebar.collapsed + .collapse-btn {
+        .sidebar.collapsed .collapse-btn {
+            position: fixed;
             left: 0;
+            top: 20px;
+            border-radius: 0 50% 50% 0;
         }
 
         .collapse-btn:hover {
@@ -74,25 +77,52 @@
             flex-grow: 1;
             padding: 20px;
             margin-left: 260px;
-            transition: margin-left 0.3s ease;
+            transition: all 0.3s ease;
             background-color: #fff;
             min-height: 100vh;
+            max-width: calc(100% - 260px);
         }
+        
+        /* 笔记标题样式优化 */
         .note-title {
-            font-size: 24px; /* 改为 32px */
+            font-size: 32px;
             color: #333;
-            margin-bottom: 10px;
+            margin-bottom: 15px;
+            padding-bottom: 8px;
+            border-bottom: 2px solid #f0f0f0;
         }
 
+        /* 章节标题样式优化 */
         .chapter {
-            font-size: 18px; /* 改为 24px */
-            margin-top: 20px;
-            color: #555;
+            font-size: 22px;
+            margin-top: 10px;
+            margin-bottom: 0;
+            color: #444;
             cursor: pointer;
-        }        
+            padding: 5px 0;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            border-radius: 4px;
+            transition: background-color 0.2s;
+        }
+        
+        .chapter:hover {
+            background-color: #f8f8f8;
+            padding-left: 8px;
+        }
+        
+        .toggle-icon {
+            margin-left: 10px;
+            font-size: 14px;
+            transition: transform 0.3s;
+        }
 
+        /* 侧边栏折叠时内容区域居中显示 */
         .sidebar.collapsed + .content-area {
-            margin-left: 60px;
+            margin-left: 0;
+            max-width: 100%;
+            padding-left: 40px; /* 为折叠按钮留出空间 */
         }
 
         /* 笔记列表 */
@@ -112,67 +142,120 @@
         .active {
             background-color: #e0e0e0;
         }
+        
+        /* 笔记目录标题 */
+        .sidebar h2 {
+            margin-bottom: 15px;
+            padding-bottom: 10px;
+            border-bottom: 1px solid #eee;
+            color: #444;
+        }
+        
     /* 新增内容显示相关样式 */
-         .chapter-content {
+        .chapter-content {
             white-space: pre-wrap; /* 保留换行符 */
-            line-height: 1.6;
+            line-height: 1.4;
             max-width: 800px;
             margin: 0 auto;
+            padding-top: 0;
+            padding-bottom: 0;
+            display: flex;
+            flex-direction: column;
+            gap: 0px; /* 控制子元素间距 */
+
         }
 
         /* 图片自适应样式 */
         .chapter-content img {
             max-width: 100%;
             height: auto;
-            margin: 15px 0;
+            margin: 10px 0;
             border-radius: 4px;
             box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
         }
 
         /* 新增代码块样式 */
         .content-formatter {
-            padding: 15px;
+            padding: 5px;
             background-color: #f9f9f9;
-            border-radius: 6px;
-            margin: 10px 0;
+            border-radius: 0px;
+            margin: 0;
+            box-shadow: 0 1px 3px rgba(0,0,0,0.05);
         }
 
-        /* 语言切换器 */
+        /* 语言切换器优化 */
         .lang-switcher {
             position: fixed;
             top: 20px;
             right: 20px;
             z-index: 1000;
+            display: flex;
+            align-items: center;
+            background-color: white;
+            border-radius: 4px;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+            padding: 5px 10px;
+        }
+        
+        .lang-icon {
+            margin-right: 8px;
+            color: #555;
         }
 
         .lang-select {
-            padding: 8px 15px;
+            padding: 6px 10px;
             border: 1px solid #ddd;
             background: white;
             cursor: pointer;
+            border-radius: 4px;
+            outline: none;
         }
+        
+        .lang-select:focus {
+            border-color: #aaa;
+        }
+        
         /* 调整段落和列表的间距 */
         .content-formatter p {
-            margin: 0 0 10px 0; /* 下边距 10px，其他方向为 0 */
+            margin: 0 0 8px 0; /* 减少下边距 */
             line-height: 1.6; /* 保持行高一致 */
         }
 
         /* 调整无序列表的样式 */
         .content-formatter ul {
-            margin: 0 0 10px 0; /* 下边距 10px，其他方向为 0 */
-            padding-left: 20px; /* 左侧缩进 20px */
+            margin: 0 0 8px 0; /* 减少下边距 */
+            padding-left: 25px; /* 减少左侧缩进 */
             list-style-type: disc; /* 列表项前的圆点 */
         }
 
         /* 调整列表项的样式 */
         .content-formatter ul li {
-            margin-bottom: 5px; /* 列表项之间的间距 */
+            margin-bottom: 3px; /* 减少列表项之间的间距 */
             line-height: 1.6; /* 保持行高一致 */
+        }
+        
+        /* 链接样式优化 */
+        .content-formatter a {
+            color: #2c7be5;
+            text-decoration: none;
+            border-bottom: 1px dotted #2c7be5;
+            transition: color 0.2s, border-color 0.2s;
+        }
+        
+        .content-formatter a:hover {
+            color: #1a56a5;
+            border-bottom-color: #1a56a5;
+        }
+        
+        /* 章节内容容器 */
+        #chaptersContainer {
+            padding: 5px 0;
         }
     </style>
 </head>
 <body>
     <div class="lang-switcher">
+        <i class="fas fa-globe lang-icon"></i>
         <select class="lang-select" onchange="changeLanguage(this.value)">
             <option value="zh">中文</option>
             <option value="en">EN</option>
@@ -182,8 +265,10 @@
 
     <!-- 侧边栏 -->
     <div class="sidebar" id="sidebar">
-        <div class="collapse-btn" onclick="toggleSidebar()">&#9776;</div>
         <h2 id="notesDirectory">学习笔记目录</h2>
+        <div class="collapse-btn" onclick="toggleSidebar()">
+            <i class="fas fa-chevron-left"></i>
+        </div>
         <ul class="notes-list" id="notesList"></ul>
     </div>
 
@@ -193,16 +278,33 @@
     </div>
 
     <script>
-
          // 侧边栏折叠/展开功能
         function toggleSidebar() {
             const sidebar = document.getElementById('sidebar');
+            const collapseBtn = document.querySelector('.collapse-btn');
+            const contentArea = document.getElementById('contentArea');
             sidebar.classList.toggle('collapsed');
+            
+            // 更新折叠按钮图标
+            const icon = collapseBtn.querySelector('i');
+            if (sidebar.classList.contains('collapsed')) {
+                icon.className = 'fas fa-bars';
+                // 侧边栏折叠时，调整内容区域宽度和居中
+                contentArea.style.maxWidth = '100%';
+                contentArea.style.margin = '0 auto';
+                contentArea.style.paddingLeft = '40px';
+            } else {
+                icon.className = 'fas fa-chevron-left';
+                // 侧边栏展开时，恢复内容区域原始样式
+                contentArea.style.maxWidth = 'calc(100% - 260px)';
+                contentArea.style.marginLeft = '260px';
+                contentArea.style.paddingLeft = '20px';
+            }
         }
 
         const translations = {
     'zh': {
-        'notesDirectory': '读书笔记目录',
+        'notesDirectory': '学习笔记目录',
         'notes': {
             'note1': {
                 title: '如何从会工作到会赚钱',
@@ -210,7 +312,7 @@
                     {
                         title: '第一章：阅读的艺术',
                         content: `阅读是一种技巧，需要不断练习。
-                        【图1】
+                                【图1】
                         推荐阅读：【《学会读书》】(https://twologbook.github.io/notes/)，这是一本非常好的书。
                         通过科学的训练方法，可以显著提升阅读速度。建议：
                         - 每天保持30分钟专注阅读
@@ -311,17 +413,21 @@
                 ]
             },
             'note4': {
-                title: '从会工作到会赚钱个人感悟',
-                chapters: [
-                    {
-                        title: '一：警惕客体思维',
-                        content: `
-                        工作调动
-                        自怨自艾
-                        不如主动出击
-                        做好自己能做的事情
-                        得到自己满意的答案
-                        `
+                title: '从会工作到会赚钱的个人感悟',
+chapters: [
+{title: '一：警惕客体思维，学会为自己负责',content:`
+  我是一个在日企工作刚满一年的新人。日企的规矩很多，比如新员工不能开车上班，因此我每天被迫坐JR+公交车通勤，并且还被来回调动了三次，真的很折磨人。今年2月我以为工作地点已经稳定下来，于是把家搬到了公司附近。然而，前两天突然接到通知，由于组织改编，我将随+2领导一起被调往一个离家很远的地方工作。
+
+  得知这个消息后，一想到之后走路+JR+公交的通勤方式我就开始疯狂内耗。但冷静下来后，我意识到，纠结和内耗无法改变现实，与其沉浸在消极情绪中，不如主动行动，看看自己能做些什么。环境只是一个约束条件，在这样的条件下，我应该思考如何优化自己的选择，而不是消极地接受一切。
+
+  于是，我先给+2领导发了邮件，询问由于通勤时间过长，我是否可以每周申请一次在宅工作，并在节假日前一天远程办公，以便能赶上末班新干线去广岛见女朋友。然而，一天过去了，对方并未回复。结合之前的情况，我推测可能是因为业务繁忙，或者新的工作地点涉及核电站保密性问题，无法在宅，所以领导选择拖延处理。
+
+  意识到等待并不是最佳策略后，我直接联系了+4领导，明确表达了自己不想更换工作地点的诉求。让我意外的是，+4领导立即打电话给+2领导，决定暂时把我我留在他手下，并在新年度开始后再为我安排进新的工作组。这次调整本来是从这个+4领导的团队转到另一个+4领导的团队，如果不采取行动，改编后再想调整就几乎没有可能了。
+
+  回想起来，或许是因为之前一次紧急加班到晚上9点多，我错过了最后的电车，向+4领导申请出租车报销票，让他对我还有印象。但更重要的是，这次我主动提出了自己的诉求，并及时采取了行动，而不是被动接受安排，任由局势发展。
+
+  这次经历让我感受到面对环境的变化，与其抱怨，不如积极寻找突破口，尽自己最大的努力去争取更好的结果。可能最终无法如愿，但采取行动，就有可能改变，而什么都不做就没有改变的可能性。
+                                                                                                                                                                 2025-03-13`
                     },
                     {
                         title: '二：多维思维',
@@ -561,6 +667,7 @@
 
         let currentLang = 'zh';
         let currentNote = 'note1';
+        let activeNoteElement = null;
 
         function init() {
             renderNotesList();
@@ -573,10 +680,20 @@
             directoryTitle.innerText = translations[currentLang]['notesDirectory'];
             
             list.innerHTML = Object.keys(translations[currentLang]['notes']).map(noteId => `
-                <li onclick="showNote('${noteId}')">
+                <li id="note-${noteId}" onclick="showNote('${noteId}')">
+                    <i class="fas fa-book-open" style="margin-right: 8px;"></i>
                     ${translations[currentLang]['notes'][noteId].title}
                 </li>
             `).join('');
+            
+            // 高亮当前选中的笔记
+            if (currentNote) {
+                const noteElement = document.getElementById(`note-${currentNote}`);
+                if (noteElement) {
+                    noteElement.classList.add('active');
+                    activeNoteElement = noteElement;
+                }
+            }
         }
 
         function changeLanguage(lang) {
@@ -603,6 +720,18 @@
 
         // 修改后的showNote函数
         function showNote(noteId) {
+            // 移除之前的活动状态
+            if (activeNoteElement) {
+                activeNoteElement.classList.remove('active');
+            }
+            
+            // 设置新的活动状态
+            const noteElement = document.getElementById(`note-${noteId}`);
+            if (noteElement) {
+                noteElement.classList.add('active');
+                activeNoteElement = noteElement;
+            }
+            
             currentNote = noteId;
             const selectedNote = translations[currentLang]['notes'][currentNote];
             const chaptersContainer = document.getElementById('chaptersContainer');
@@ -611,7 +740,8 @@
                 <div class="note-title">${selectedNote.title}</div>
                 ${selectedNote.chapters.map((chapter, index) => `
                     <div class="chapter" onclick="toggleContent(${index})">
-                        ${chapter.title} <span class="toggle-icon">▼</span>
+                        ${chapter.title}
+                        <span class="toggle-icon"><i class="fas fa-chevron-down"></i></span>
                     </div>
                     <div class="chapter-content" id="chapterContent${index}">
                         <div class="content-formatter">
@@ -620,20 +750,27 @@
                     </div>
                 `).join('')}
             `;
+            
+            // 默认展开第一个章节
+            if (selectedNote.chapters.length > 0) {
+                const firstContent = document.getElementById('chapterContent0');
+                if (firstContent) {
+                    firstContent.style.display = 'block';
+                }
+            }
         }
-
 
         function toggleContent(index) {
             const content = document.getElementById(`chapterContent${index}`);
-            const icon = document.querySelectorAll('.toggle-icon')[index];
+            const icon = document.querySelectorAll('.chapter .toggle-icon i')[index];
 
-                if (content.style.display === 'none') {
-                    content.style.display = 'block';
-                    icon.innerText = '▼';
-                } else {
-                    content.style.display = 'none';
-                    icon.innerText = '▶';
-                }
+            if (content.style.display === 'none' || !content.style.display) {
+                content.style.display = 'block';
+                icon.className = 'fas fa-chevron-up';
+            } else {
+                content.style.display = 'none';
+                icon.className = 'fas fa-chevron-down';
+            }
         }
 
         window.onload = init;
