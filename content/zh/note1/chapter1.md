@@ -7,3 +7,4 @@ UP主的高质量干货社区【superlinear.academy】(https://www.superlinear.a
 
 这个网站上的大多数想法都来源以上链接，希望对大家有所帮助。
 这是这个网站的【代码仓库】（https://github.com/twologbook/notes）放在这里方便我更新内容。
+这是这个网站的【网址】(https://twologbook.github.io/notes/)放在这里方便我Debug。
