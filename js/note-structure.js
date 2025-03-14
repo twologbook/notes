@@ -6,9 +6,9 @@ const noteStructure = {
             'note1': {
                 title: '如何从会工作到会赚钱',
                 chapters: [
-                    { title: '第一章：阅读的艺术', path: 'content/zh/note1/chapter1.md' },
-                    { title: '第二章：如何有效记笔记', path: 'content/zh/note1/chapter2.md' },
-                    { title: '第三章：时间管理', path: 'content/zh/note1/chapter3.md' }
+                    { title: '序章：写在所有一切的最前面', path: 'content/zh/note1/chapter1.md' },
+                    { title: '第一章：如何有效记笔记', path: 'content/zh/note1/chapter2.md' },
+                    { title: '第二章：时间管理', path: 'content/zh/note1/chapter3.md' }
                 ]
             },
             'note2': {
