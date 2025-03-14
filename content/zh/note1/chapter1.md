@@ -5,5 +5,5 @@ BiliBili课堂【如何从「会工作」到「会赚钱」？】(https://www.bi
 UP主的高质量干货社区【superlinear.academy】(https://www.superlinear.academy/feed)也是我学习的来源，欢迎大家一起在社区中交流。
 
 这个网站上的大多数想法都来源以上链接，希望对大家有所帮助。
-这是这个网站的【代码仓库】（https://github.com/twologbook/notes）放在这里方便我更新内容。
+这是这个网站的【代码仓库】(https://github.com/twologbook/notes)放在这里方便我更新内容。
 这是这个网站的【网址】(https://twologbook.github.io/notes/)放在这里方便我Debug。
