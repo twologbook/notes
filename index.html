@@ -162,6 +162,7 @@
             display: flex;
             flex-direction: column;
             gap: 0px; /* 控制子元素间距 */
+            display: none; /* 默认隐藏 */
         }
 
         /* 图片自适应样式 */
@@ -250,6 +251,22 @@
         #chaptersContainer {
             padding: 5px 0;
         }
+
+        /* 加载指示器 */
+        .loading {
+            display: inline-block;
+            width: 20px;
+            height: 20px;
+            border: 3px solid rgba(0,0,0,0.1);
+            border-radius: 50%;
+            border-top-color: #333;
+            animation: spin 1s ease-in-out infinite;
+            margin: 0 auto;
+        }
+
+        @keyframes spin {
+            to { transform: rotate(360deg); }
+        }
     </style>
 </head>
 <body>
@@ -276,412 +293,43 @@
         <div id="chaptersContainer"></div>
     </div>
 
+    <!-- 引入Markdown加载和笔记结构文件 -->
+    <script src="js/markdown-loader.js"></script>
+    <script src="js/note-structure.js"></script>
+    
     <script>
-         // 侧边栏折叠/展开功能
+        // 侧边栏折叠/展开功能
         function toggleSidebar() {
             const sidebar = document.getElementById('sidebar');
-            const collapseBtn = document.querySelector('.collapse-btn');
-            const contentArea = document.getElementById('contentArea');
-            sidebar.classList.toggle('collapsed');
+            const collapseBtn = sidebar.querySelector('.collapse-btn i');
             
-            // 更新折叠按钮图标
-            const icon = collapseBtn.querySelector('i');
             if (sidebar.classList.contains('collapsed')) {
-                icon.className = 'fas fa-bars';
-                // 侧边栏折叠时，调整内容区域宽度和居中
-                contentArea.style.maxWidth = '100%';
-                contentArea.style.margin = '0 auto';
-                contentArea.style.paddingLeft = '40px';
+                sidebar.classList.remove('collapsed');
+                collapseBtn.className = 'fas fa-chevron-left';
             } else {
-                icon.className = 'fas fa-chevron-left';
-                // 侧边栏展开时，恢复内容区域原始样式
-                contentArea.style.maxWidth = 'calc(100% - 260px)';
-                contentArea.style.marginLeft = '260px';
-                contentArea.style.paddingLeft = '20px';
+                sidebar.classList.add('collapsed');
+                collapseBtn.className = 'fas fa-chevron-right';
             }
         }
-
-        const translations = {
-    'zh': {
-        'notesDirectory': '学习笔记目录',
-        'notes': {
-            'note1': {
-                title: '如何从会工作到会赚钱',
-                chapters: [
-                    {
-                        title: '第一章：阅读的艺术',
-                        content: `阅读是一种技巧，需要不断练习。
-                                【图1】
-                        推荐阅读：【《学会读书》】(https://twologbook.github.io/notes/)，这是一本非常好的书。
-                        通过科学的训练方法，可以显著提升阅读速度。建议：
-                        - 每天保持30分钟专注阅读
-                        - 使用SQ3R阅读法
-                        - 定期复习笔记
-                        【图2】
-                        进阶技巧包括：
-                        1. 预读法快速筛选内容
-                        2. 关键词标记法
-                        3. 思维导图整理`
-                    },
-                    {
-                        title: '第二章：如何有效记笔记',
-                        content: `记笔记能帮助你理解和记忆。【图3】
-                        
-                        常用笔记方法：
-                        - 康奈尔笔记法
-                        - 思维导图法
-                        - 大纲笔记法`
-                    },
-                    {
-                        title: '第三章：时间管理',
-                        content: `高效的时间管理是成功的关键。【图4】
-                        关于挣钱：
-                            <ul><li><a href="https://example.com/1">标题1</a></li><li><a href="https://example.com/2">标题2</a></li><li><a href="https://example.com/3">标题3</a></li></ul>
-                            
-                        关于学习：
-                            <ul><li><a href="https://example.com/4">标题1</a></li><li><a href="https://example.com/5">标题2</a></li><li><a href="https://example.com/6">标题3</a></li></ul>
-                        推荐工具：
-                        - 番茄工作法
-                        - GTD（Getting Things Done）
-                        - 时间块管理法`
-                    }
-                ]
-            },
-            'note2': {
-                title: '人类简史',
-                chapters: [
-                    {
-                        title: '第一章：人类的起源',
-                        content: `人类的历史可追溯至百万年前。【图5】
-                        
-                        主要阶段：
-                        - 旧石器时代
-                        - 新石器时代
-                        - 农业革命`
-                    },
-                    {
-                        title: '第二章：农业革命',
-                        content: `农业改变了人类社会结构。【图6】
-                        
-                        影响：
-                        - 定居生活
-                        - 社会分层
-                        - 文明兴起`
-                    },
-                    {
-                        title: '第三章：工业革命',
-                        content: `工业革命带来了巨大的生产力提升。【图7】
-                        
-                        主要发明：
-                        - 蒸汽机
-                        - 纺织机
-                        - 铁路`
-                    }
-                ]
-            },
-            'note3': {
-                title: '使用Mauns实现工作流程简化',
-                chapters: [
-                    {
-                        title: '第一章：之前的工作流程',
-                        content: `繁琐的低效的重复的工作。【图8】
-                        
-                        问题：
-                        - 手动操作
-                        - 容易出错
-                        - 耗时`
-                    },
-                    {
-                        title: '第二章：希望改善的流程',
-                        content: `在xxxxx方面，可以进行改善。【图9】
-                        
-                        改进方向：
-                        - 自动化
-                        - 数据预处理
-                        - 错误检查`
-                    },
-                    {
-                        title: '第三章：使用Mauns前的任务拆解',
-                        content: `对复杂的任务进行拆解。【图10】
-                        
-                        步骤：
-                        1. 分析任务
-                        2. 识别难点
-                        3. 设计解决方案`
-                    }
-                ]
-            },
-            'note4': {
-                title: '从会工作到会赚钱的个人感悟',
-chapters: [
-{title: '一：警惕客体思维，学会为自己负责',content:`
-  我是一个在日企工作刚满一年的新人。日企的规矩很多，比如新员工不能开车上班，因此我每天被迫坐JR+公交车通勤，并且还被来回调动了三次，真的很折磨人。今年2月我以为工作地点已经稳定下来，于是把家搬到了公司附近。然而，前两天突然接到通知，由于组织改编，我将随+2领导一起被调往一个离家很远的地方工作。
-
-  得知这个消息后，一想到之后走路+JR+公交的通勤方式我就开始疯狂内耗。但冷静下来后，我意识到，纠结和内耗无法改变现实，与其沉浸在消极情绪中，不如主动行动，看看自己能做些什么。环境只是一个约束条件，在这样的条件下，我应该思考如何优化自己的选择，而不是消极地接受一切。
-
-  于是，我先给+2领导发了邮件，询问由于通勤时间过长，我是否可以每周申请一次在宅工作，并在节假日前一天远程办公，以便能赶上末班新干线去广岛见女朋友。然而，一天过去了，对方并未回复。结合之前的情况，我推测可能是因为业务繁忙，或者新的工作地点涉及核电站保密性问题，无法在宅，所以领导选择拖延处理。
-
-  意识到等待并不是最佳策略后，我直接联系了+4领导，明确表达了自己不想更换工作地点的诉求。让我意外的是，+4领导立即打电话给+2领导，决定暂时把我我留在他手下，并在新年度开始后再为我安排进新的工作组。这次调整本来是从这个+4领导的团队转到另一个+4领导的团队，如果不采取行动，改编后再想调整就几乎没有可能了。
-
-  回想起来，或许是因为之前一次紧急加班到晚上9点多，我错过了最后的电车，向+4领导申请出租车报销票，让他对我还有印象。但更重要的是，这次我主动提出了自己的诉求，并及时采取了行动，而不是被动接受安排，任由局势发展。
-
-  这次经历让我感受到面对环境的变化，与其抱怨，不如积极寻找突破口，尽自己最大的努力去争取更好的结果。可能最终无法如愿，但采取行动，就有可能改变，而什么都不做就没有改变的可能性。
-                                                                                                                                                                 2025-03-13`
-                    },
-                    {
-                        title: '二：多维思维',
-                        content: `
-                        女朋友在就职活动
-                        问我entry sheet中还报了什么公司这个问题怎么回答
-                        突然发现这不是一个写了什么就能拿到offer或者不写什么就能拿到offer的问题
-                        自己怎么看待自己 自己怎么评价公司
-                        如果自己是HR怎么看待自己的简历
-                        怎么评价自己的公司
-                        匹配度
-                        在学会思考认识自己的过程中
-                        顺带着拿到自己满意的offer
-                        即使这次offer不满意
-                        也是对下次的积累
-                        在人生这一辈子中
-                        比起一个offer可能认识自己评价自己
-                        学会正确的思维方式更加重要
-                        `
-                    },
-                    {
-                        title: '第三章：工业革命',
-                        content: `工业革命带来了巨大的生产力提升。【图7】
-                        
-                        主要发明：
-                        - 蒸汽机
-                        - 纺织机
-                        - 铁路`
-                    }
-                ]
-            }
-        }
-    },
-    'en': {
-        'notesDirectory': 'Learning Notes',
-        'notes': {
-            'note1': {
-                title: 'How to Go from Working to Earning',
-                chapters: [
-                    {
-                        title: 'Chapter 1: The Art of Reading',
-                        content: `Reading is a skill that requires practice.【图1】
-                        
-                        Tips to improve:
-                        - Read for 30 minutes daily
-                        - Use the SQ3R method
-                        - Review notes regularly`
-                    },
-                    {
-                        title: 'Chapter 2: Effective Note-Taking',
-                        content: `Taking notes enhances comprehension and memory.【图2】
-                        
-                        Popular methods:
-                        - Cornell Notes
-                        - Mind Mapping
-                        - Outline Method`
-                    },
-                    {
-                        title: 'Chapter 3: Time Management',
-                        content: `Efficient time management is key to success.【图3】
-                        
-                        Recommended tools:
-                        - Pomodoro Technique
-                        - GTD (Getting Things Done)
-                        - Time Blocking`
-                    }
-                ]
-            },
-            'note2': {
-                title: 'Sapiens: A Brief History of Humankind',
-                chapters: [
-                    {
-                        title: 'Chapter 1: The Origin of Humans',
-                        content: `Human history dates back millions of years.【图4】
-                        
-                        Key stages:
-                        - Paleolithic Era
-                        - Neolithic Era
-                        - Agricultural Revolution`
-                    },
-                    {
-                        title: 'Chapter 2: The Agricultural Revolution',
-                        content: `Agriculture transformed human societies.【图5】
-                        
-                        Impacts:
-                        - Settled life
-                        - Social stratification
-                        - Rise of civilizations`
-                    },
-                    {
-                        title: 'Chapter 3: The Industrial Revolution',
-                        content: `The Industrial Revolution brought massive productivity gains.【图6】
-                        
-                        Major inventions:
-                        - Steam engine
-                        - Spinning jenny
-                        - Railways`
-                    }
-                ]
-            },
-            'note3': {
-                title: 'Simplifying Workflows with Mauns',
-                chapters: [
-                    {
-                        title: 'Chapter 1: Previous Workflow',
-                        content: `Tedious, inefficient, and repetitive tasks.【图7】
-                        
-                        Issues:
-                        - Manual operations
-                        - Error-prone
-                        - Time-consuming`
-                    },
-                    {
-                        title: 'Chapter 2: Desired Improvements',
-                        content: `Areas for improvement in xxxxx.【图8】
-                        
-                        Directions:
-                        - Automation
-                        - Data preprocessing
-                        - Error checking`
-                    },
-                    {
-                        title: 'Chapter 3: Task Breakdown Before Using Mauns',
-                        content: `Breaking down complex tasks.【图9】
-                        
-                        Steps:
-                        1. Analyze the task
-                        2. Identify challenges
-                        3. Design solutions`
-                    }
-                ]
-            }
-        }
-    },
-    'ja': {
-        'notesDirectory': '学習ノート一覧',
-        'notes': {
-            'note1': {
-                title: '働ける状態から稼げる状態になるまで',
-                chapters: [
-                    {
-                        title: '第1章：読書の技術',
-                        content: `読書はスキルであり、練習が必要です。【図1】
-                        
-                        上達のコツ：
-                        - 毎日30分集中して読む
-                        - SQ3R法を使う
-                        - 定期的にノートを復習する`
-                    },
-                    {
-                        title: '第2章：効果的なメモの取り方',
-                        content: `メモを取ることで理解と記憶が向上します。【図2】
-                        
-                        一般的な方法：
-                        - コーネルノート法
-                        - マインドマップ
-                        - アウトライン法`
-                    },
-                    {
-                        title: '第3章：時間管理',
-                        content: `効率的な時間管理は成功の鍵です。【図3】
-                        
-                        おすすめのツール：
-                        - ポモドーロテクニック
-                        - GTD（Getting Things Done）
-                        - タイムブロッキング`
-                    }
-                ]
-            },
-            'note2': {
-                title: 'サピエンス全史',
-                chapters: [
-                    {
-                        title: '第1章：人類の起源',
-                        content: `人類の歴史は何百万年前に遡ります。【図4】
-                        
-                        主な段階：
-                        - 旧石器時代
-                        - 新石器時代
-                        - 農業革命`
-                    },
-                    {
-                        title: '第2章：農業革命',
-                        content: `農業は人類社会を変革しました。【図5】
-                        
-                        影響：
-                        - 定住生活
-                        - 社会階層
-                        - 文明の興隆`
-                    },
-                    {
-                        title: '第3章：産業革命',
-                        content: `産業革命は生産性を大幅に向上させました。【図6】
-                        
-                        主な発明：
-                        - 蒸気機関
-                        - 紡績機
-                        - 鉄道`
-                    }
-                ]
-            },
-            'note3': {
-                title: 'Maunsを使ったワークフローの簡素化',
-                chapters: [
-                    {
-                        title: '第1章：以前のワークフロー',
-                        content: `面倒で非効率的な繰り返し作業。【図7】
-                        
-                        問題点：
-                        - 手動操作
-                        - エラーが発生しやすい
-                        - 時間がかかる`
-                    },
-                    {
-                        title: '第2章：改善したい点',
-                        content: `xxxxxの分野で改善が可能です。【図8】
-                        
-                        改善方向：
-                        - 自動化
-                        - データの前処理
-                        - エラーチェック`
-                    },
-                    {
-                        title: '第3章：Mauns使用前のタスク分解',
-                        content: `複雑なタスクを分解します。【図9】
-                        
-                        手順：
-                        1. タスクを分析する
-                        2. 課題を特定する
-                        3. 解決策を設計する`
-                    }
-                ]
-            }
-        }
-    }
-};
 
         let currentLang = 'zh';
         let currentNote = 'note1';
         let activeNoteElement = null;
-
+        
         function init() {
             renderNotesList();
             showNote(currentNote);
         }
-
+        
         function renderNotesList() {
             const list = document.getElementById('notesList');
             const directoryTitle = document.getElementById('notesDirectory');
-            directoryTitle.innerText = translations[currentLang]['notesDirectory'];
+            directoryTitle.innerText = noteStructure[currentLang]['notesDirectory'];
             
-            list.innerHTML = Object.keys(translations[currentLang]['notes']).map(noteId => `
+            list.innerHTML = Object.keys(noteStructure[currentLang]['notes']).map(noteId => `
                 <li id="note-${noteId}" onclick="showNote('${noteId}')">
                     <i class="fas fa-book-open" style="margin-right: 8px;"></i>
-                    ${translations[currentLang]['notes'][noteId].title}
+                    ${noteStructure[currentLang]['notes'][noteId].title}
                 </li>
             `).join('');
             
@@ -694,31 +342,15 @@ chapters: [
                 }
             }
         }
-
+        
         function changeLanguage(lang) {
             currentLang = lang;
             renderNotesList();
             showNote(currentNote);
         }
-
-        // 新增内容格式化函数
-        function formatContent(content) {
-            return content
-                .replace(/【图(\d+)】/g, '<img src="picture/图$1.jpg">') // 图片简写语法
-                .replace(/【(.+?)】\((https?:\/\/[^\s]+)\)/g, '<a href="$2"> $1 </a>') // 超链接简写语法
-                .replace(/关于(.+?)：\s*((?:标题\d+】\(https?:\/\/[^\s]+\)\s*)+)/g, (match, category, links) => {
-            // 解析链接
-            const listItems = links.trim().split(/\s+/).map(link => {
-                const [text, url] = link.match(/标题(\d+)】\((https?:\/\/[^\s]+)\)/).slice(1);
-                return `<li><a href="${url}">${category} 标题${text}</a></li>`;
-            }).join('');
-            return `<p>关于${category}：</p><ul>${listItems}</ul>`;
-        })
-                .replace(/\n/g, '<br>'); // 自动转换换行符
-        }
-
-        // 修改后的showNote函数
-        function showNote(noteId) {
+        
+        // 修改后的showNote函数，从Markdown文件加载内容
+        async function showNote(noteId) {
             // 移除之前的活动状态
             if (activeNoteElement) {
                 activeNoteElement.classList.remove('active');
@@ -732,9 +364,10 @@ chapters: [
             }
             
             currentNote = noteId;
-            const selectedNote = translations[currentLang]['notes'][currentNote];
+            const selectedNote = noteStructure[currentLang]['notes'][currentNote];
             const chaptersContainer = document.getElementById('chaptersContainer');
             
+            // 先显示笔记标题和章节标题结构
             chaptersContainer.innerHTML = `
                 <div class="note-title">${selectedNote.title}</div>
                 ${selectedNote.chapters.map((chapter, index) => `
@@ -743,35 +376,55 @@ chapters: [
                         <span class="toggle-icon"><i class="fas fa-chevron-down"></i></span>
                     </div>
                     <div class="chapter-content" id="chapterContent${index}">
-                        <div class="content-formatter">
-                            ${formatContent(chapter.content)}
-                        </div>
+                        <div class="loading"></div>
                     </div>
                 `).join('')}
             `;
             
-            // 默认展开第一个章节
+            // 默认展开第一个章节并加载其内容
             if (selectedNote.chapters.length > 0) {
                 const firstContent = document.getElementById('chapterContent0');
                 if (firstContent) {
                     firstContent.style.display = 'block';
+                    await loadChapterContent(0);
                 }
             }
         }
-
+        
+        // 新增加载章节内容的函数
+        async function loadChapterContent(index) {
+            const selectedNote = noteStructure[currentLang]['notes'][currentNote];
+            const chapterPath = selectedNote.chapters[index].path;
+            const contentElement = document.getElementById(`chapterContent${index}`);
+            
+            try {
+                const markdownContent = await loadMarkdownContent(chapterPath);
+                const htmlContent = parseMarkdown(markdownContent);
+                contentElement.innerHTML = `<div class="content-formatter">${htmlContent}</div>`;
+            } catch (error) {
+                contentElement.innerHTML = `<div class="content-formatter">加载内容失败: ${error.message}</div>`;
+                console.error('Error loading chapter content:', error);
+            }
+        }
+        
         function toggleContent(index) {
             const content = document.getElementById(`chapterContent${index}`);
             const icon = document.querySelectorAll('.chapter .toggle-icon i')[index];
-
+            
             if (content.style.display === 'none' || !content.style.display) {
                 content.style.display = 'block';
                 icon.className = 'fas fa-chevron-up';
+                
+                // 如果内容还没加载，则加载内容
+                if (content.querySelector('.loading')) {
+                    loadChapterContent(index);
+                }
             } else {
                 content.style.display = 'none';
                 icon.className = 'fas fa-chevron-down';
             }
         }
-
+        
         window.onload = init;
     </script>
 </body>
