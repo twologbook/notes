@@ -1,4 +1,3 @@
-# 序章：写在所有一切的最前面
 
 这个个人站是本人在看B站UP主 【课代表立正】(https://space.bilibili.com/491306902) 在BiliBili课堂上所讲授的【如何从「会工作」到「会赚钱」？】(https://www.bilibili.com/cheese/play/ss300796438?bsource=link_copy)过程中感到受益匪浅，为了给自己学习的过程留下痕迹和想法所创建的。
 UP主【课代表立正】(https://space.bilibili.com/491306902)有很多干货，非常推荐大家去看。
