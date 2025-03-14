@@ -6,17 +6,17 @@ const noteStructure = {
             'note1': {
                 title: '如何从会工作到会赚钱',
                 chapters: [
-                    { title: '序章：写在所有一切的最前面', path: 'content/zh/note1/chapter1.md' },
-                    { title: '第一章：如何有效记笔记', path: 'content/zh/note1/chapter2.md' },
-                    { title: '第二章：时间管理', path: 'content/zh/note1/chapter3.md' }
+                    { title: '序章：写在最前面', path: 'content/zh/note1/chapter1.md' },
+                    { title: '第一章：-', path: 'content/zh/note1/chapter2.md' },
+                    { title: '第二章：', path: 'content/zh/note1/chapter3.md' }
                 ]
             },
             'note2': {
-                title: '人类简史',
+                title: '留给Agentic AI',
                 chapters: [
-                    { title: '第一章：人类的起源', path: 'content/zh/note2/chapter1.md' },
-                    { title: '第二章：农业革命', path: 'content/zh/note2/chapter2.md' },
-                    { title: '第三章：工业革命', path: 'content/zh/note2/chapter3.md' }
+                    { title: '第一章：-', path: 'content/zh/note2/chapter1.md' },
+                    { title: '第二章：-', path: 'content/zh/note2/chapter2.md' },
+                    { title: '第三章：-', path: 'content/zh/note2/chapter3.md' }
                 ]
             },
             'note3': {
@@ -32,7 +32,17 @@ const noteStructure = {
                 chapters: [
                     { title: '一：警惕客体思维，学会为自己负责', path: 'content/zh/note4/chapter1.md' },
                     { title: '二：多维思维', path: 'content/zh/note4/chapter2.md' },
-                    { title: '第三章：工业革命', path: 'content/zh/note4/chapter3.md' }
+                    { title: '第三章：更新中', path: 'content/zh/note4/chapter3.md' }
+                ]
+            },
+            'note5': {
+                title: '从会工作到会赚钱扩展视频合集',
+                chapters: [
+                    { title: '职业发展与晋升', path: 'content/zh/note5/chapter1.md' },
+                    { title: '管理技巧与领导力', path: 'content/zh/note5/chapter2.md' },
+                    { title: '个人成长与思维方法', path: 'content/zh/note5/chapter3.md' },
+                    { title: '数据科学与技术', path: 'content/zh/note5/chapter4.md' },
+                    { title: '创业与商业洞察', path: 'content/zh/note5/chapter5.md' }
                 ]
             }
         }
@@ -43,25 +53,25 @@ const noteStructure = {
             'note1': {
                 title: 'How to Go from Working to Earning',
                 chapters: [
-                    { title: 'Chapter 1: The Art of Reading', path: 'content/en/note1/chapter1.md' },
-                    { title: 'Chapter 2: Effective Note-Taking', path: 'content/en/note1/chapter2.md' },
-                    { title: 'Chapter 3: Time Management', path: 'content/en/note1/chapter3.md' }
+                    { title: 'Chapter 1: -', path: 'content/en/note1/chapter1.md' },
+                    { title: 'Chapter 2: -', path: 'content/en/note1/chapter2.md' },
+                    { title: 'Chapter 3: -', path: 'content/en/note1/chapter3.md' }
                 ]
             },
             'note2': {
-                title: 'Sapiens: A Brief History of Humankind',
+                title: 'Updating',
                 chapters: [
-                    { title: 'Chapter 1: The Origin of Humans', path: 'content/en/note2/chapter1.md' },
-                    { title: 'Chapter 2: The Agricultural Revolution', path: 'content/en/note2/chapter2.md' },
-                    { title: 'Chapter 3: The Industrial Revolution', path: 'content/en/note2/chapter3.md' }
+                    { title: 'Chapter 1: -', path: 'content/en/note2/chapter1.md' },
+                    { title: 'Chapter 2: -', path: 'content/en/note2/chapter2.md' },
+                    { title: 'Chapter 3: -', path: 'content/en/note2/chapter3.md' }
                 ]
             },
             'note3': {
                 title: 'Simplifying Workflows with Mauns',
                 chapters: [
-                    { title: 'Chapter 1: Previous Workflow', path: 'content/en/note3/chapter1.md' },
-                    { title: 'Chapter 2: Desired Improvements', path: 'content/en/note3/chapter2.md' },
-                    { title: 'Chapter 3: Task Breakdown Before Using Mauns', path: 'content/en/note3/chapter3.md' }
+                    { title: 'Chapter 1: -', path: 'content/en/note3/chapter1.md' },
+                    { title: 'Chapter 2: -', path: 'content/en/note3/chapter2.md' },
+                    { title: 'Chapter 3: -', path: 'content/en/note3/chapter3.md' }
                 ]
             }
         }
@@ -70,19 +80,19 @@ const noteStructure = {
         'notesDirectory': '学習ノート一覧',
         'notes': {
             'note1': {
-                title: '働ける状態から稼げる状態になるまで',
+                title: '更新中',
                 chapters: [
-                    { title: '第1章：読書の技術', path: 'content/ja/note1/chapter1.md' },
-                    { title: '第2章：効果的なメモの取り方', path: 'content/ja/note1/chapter2.md' },
-                    { title: '第3章：時間管理', path: 'content/ja/note1/chapter3.md' }
+                    { title: '第1章：-', path: 'content/ja/note1/chapter1.md' },
+                    { title: '第2章：-', path: 'content/ja/note1/chapter2.md' },
+                    { title: '第3章：-', path: 'content/ja/note1/chapter3.md' }
                 ]
             },
             'note2': {
-                title: 'サピエンス全史',
+                title: '-',
                 chapters: [
-                    { title: '第1章：人類の起源', path: 'content/ja/note2/chapter1.md' },
-                    { title: '第2章：農業革命', path: 'content/ja/note2/chapter2.md' },
-                    { title: '第3章：産業革命', path: 'content/ja/note2/chapter3.md' }
+                    { title: '第1章：-', path: 'content/ja/note2/chapter1.md' },
+                    { title: '第2章：-', path: 'content/ja/note2/chapter2.md' },
+                    { title: '第3章：-', path: 'content/ja/note2/chapter3.md' }
                 ]
             },
             'note3': {
