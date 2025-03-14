@@ -8,7 +8,7 @@ const noteStructure = {
                 chapters: [
                     { title: '序章：写在最前面', path: 'content/zh/note1/chapter1.md' },
                     { title: '第一章：-', path: 'content/zh/note1/chapter2.md' },
-                    { title: '第二章：', path: 'content/zh/note1/chapter3.md' }
+                    { title: '第二章：-', path: 'content/zh/note1/chapter3.md' }
                 ]
             },
             'note2': {
