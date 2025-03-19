@@ -6,9 +6,30 @@ const noteStructure = {
             'note1': {
                 title: '如何从会工作到会赚钱',
                 chapters: [
-                    { title: '序章：写在最前面', path: 'content/zh/note1/chapter1.md' },
-                    { title: '第一章：-', path: 'content/zh/note1/chapter2.md' },
-                    { title: '第二章：-', path: 'content/zh/note1/chapter3.md' }
+                    { title: '序章：写在最前面', path: 'content/zh/note1/chapter0.md' },
+                    { title: '第一章：好学生=好工作=赚大钱？', path: 'content/zh/note1/chapter1.md' },
+                    { title: '第二章：', path: 'content/zh/note1/chapter2.md' },
+                    { title: '第三章：', path: 'content/zh/note1/chapter3.md' },
+                    { title: '第四章：', path: 'content/zh/note1/chapter4.md' },
+                    { title: '第五章：', path: 'content/zh/note1/chapter5.md' },
+                    { title: '第六章：', path: 'content/zh/note1/chapter6.md' },
+                    { title: '第七章：', path: 'content/zh/note1/chapter7.md' },
+                    { title: '第八章：', path: 'content/zh/note1/chapter8.md' },
+                    { title: '第九章：', path: 'content/zh/note1/chapter9.md' },
+                    { title: '第十章：', path: 'content/zh/note1/chapter10.md' },
+                    { title: '第十一章：', path: 'content/zh/note1/chapter11.md' },
+                    { title: '第十二章：', path: 'content/zh/note1/chapter12.md' },
+                    { title: '第十三章：', path: 'content/zh/note1/chapter13.md' },
+                    { title: '第十四章：', path: 'content/zh/note1/chapter14.md' },
+                    { title: '第十五章：', path: 'content/zh/note1/chapter15.md' },
+                    { title: '第十六章：', path: 'content/zh/note1/chapter16.md' },
+                    { title: '第十七章：', path: 'content/zh/note1/chapter17.md' },
+                    { title: '第十八章：', path: 'content/zh/note1/chapter18.md' },
+                    { title: '第十九章：', path: 'content/zh/note1/chapter19.md' },
+                    { title: '第二十章：', path: 'content/zh/note1/chapter20.md' },
+                    { title: '第二十一章：', path: 'content/zh/note1/chapter21.md' },
+                    { title: '第二十二章：', path: 'content/zh/note1/chapter22.md' },
+                    { title: '第二十三章：', path: 'content/zh/note1/chapter23.md' }
                 ]
             },
             'note2': {
@@ -31,7 +52,7 @@ const noteStructure = {
                 title: '从会工作到会赚钱的个人感悟',
                 chapters: [
                     { title: '一：警惕客体思维，学会为自己负责', path: 'content/zh/note4/chapter1.md' },
-                    { title: '二：多维思维', path: 'content/zh/note4/chapter2.md' },
+                    { title: '二：警惕打分思维，接纳多样的世界', path: 'content/zh/note4/chapter2.md' },
                     { title: '第三章：更新中', path: 'content/zh/note4/chapter3.md' }
                 ]
             },

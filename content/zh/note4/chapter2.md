@@ -1,15 +1,21 @@
 
-女朋友在就职活动
-问我entry sheet中还报了什么公司这个问题怎么回答
-突然发现这不是一个写了什么就能拿到offer或者不写什么就能拿到offer的问题
-自己怎么看待自己 自己怎么评价公司
-如果自己是HR怎么看待自己的简历
-怎么评价自己的公司
-匹配度
-在学会思考认识自己的过程中
+我觉得如果她能在学会思考认识自己的过程中
 顺带着拿到自己满意的offer
 即使这次offer不满意
 也是对下次的积累
 在人生这一辈子中
-比起一个offer可能认识自己评价自己
+比起拿到一个offer可能如何认识自己评价自己
 学会正确的思维方式更加重要
+
+&nbsp;&nbsp;&nbsp;女朋友最近在准备就职，在填写资料的过程中有一个问题是：你还报了其他的哪些公司？她不知道怎么写于是问到了我。
+&nbsp;&nbsp;&nbsp;我突然意识到这个问题没有标准答案，这个问题的关键不是写了什么公司，也不是避免写什么公司。而是你 如何看待自己，你 如何评价这个公司。
+&nbsp;&nbsp;&nbsp;因为在市场上HR对自己公司的水平有一个判断，对你的简历上展现的能力比公司要求高还是低也有一判断。
+同样，作为求职者应该对于自己的水平和这个公司的层次也有一个判断。公司问还报了其他的哪些公司实际上就是做了一个匹配度的测试。
+潜台词就是你觉得自己能到什么层次的公司就职？你觉得本公司和哪些公司水平差不多？
+HR会通过你对自己、对自己能进什么层次的公司的判断，来评价你和HR的判断是否一致。
+如果两边的判断匹配的上，就有了一个进面试的可能性。
+&nbsp;&nbsp;&nbsp;于是我就把我的思考过程告诉了她，并让她自己思考判断。
+&nbsp;&nbsp;&nbsp;我觉得，如果她能在思考和认识自己的过程中，顺带拿到一个满意的 offer，那当然是好事。
+但即使这次的结果不尽如人意，这个过程本身也是一种积累。
+人生还很长，比起单纯拿到一个offer，学会如何正确地认识自己、评价自己，以及建立合理的思维方式，或许才是更重要的事情。
+如果能学会这种思考方式，或许会在未来的每一次选择中发挥作用，也会影响她整个人生的方向。<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;2025-03-16
