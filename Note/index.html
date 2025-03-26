@@ -1,0 +1,680 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Twologbook Notes</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Noto+Sans+SC:wght@400;500;700&family=Noto+Serif+SC:wght@400;700&display=swap">
+    <style>
+        /* 基础样式 */
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        
+        body { 
+            font-family: 'Noto Sans SC', 'Segoe UI', Arial, sans-serif; 
+            display: flex; 
+            min-height: 100vh; 
+            background-color: #f8f9fa; 
+            color: #333;
+            line-height: 1.6;
+        }
+
+        /* 侧边栏样式 */
+        .sidebar {
+            width: 280px;
+            background-color: #ffffff;
+            padding: 25px;
+            border-right: 1px solid #e0e0e0;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.05);
+            height: 100vh;
+            overflow-y: auto;
+            position: fixed;
+            left: 0;
+            top: 0;
+            transition: width 0.3s ease;
+            z-index: 100;
+        }
+
+        /* 折叠状态下的侧边栏 */
+        .sidebar.collapsed {
+            width: 0;
+            padding: 0;
+        }
+
+        .sidebar.collapsed .notes-list li {
+            text-align: center;
+            padding: 10px 0;
+        }
+
+        .sidebar.collapsed .notes-list li span {
+            display: none;
+        }
+
+        .sidebar.collapsed h2 {
+            display: none;
+        }
+
+        /* 折叠按钮 - 移到侧边栏内部 */
+        .collapse-btn {
+            position: absolute;
+            top: 25px;
+            right: 25px;
+            background-color: #ffffff;
+            border: 1px solid #e0e0e0;
+            border-radius: 50%;
+            width: 36px;
+            height: 36px;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+            z-index: 1000;
+            transition: all 0.2s ease;
+        }
+
+        .sidebar.collapsed .collapse-btn {
+            position: fixed;
+            left: 0;
+            top: 25px;
+            border-radius: 0 50% 50% 0;
+        }
+
+        .collapse-btn:hover {
+            background-color: #f5f5f5;
+            transform: scale(1.05);
+        }
+
+        /* 内容区域 */
+        .content-area {
+            flex-grow: 1;
+            padding: 40px;
+            margin-left: 280px;
+            transition: all 0.3s ease;
+            background-color: #fff;
+            min-height: 100vh;
+            max-width: calc(100% - 280px);
+        }
+        
+        /* 笔记标题样式优化 */
+        .note-title {
+            font-family: 'Noto Serif SC', serif;
+            font-size: 36px;
+            color: #2c3e50;
+            margin-bottom: 25px;
+            padding-bottom: 15px;
+            border-bottom: 2px solid #ecf0f1;
+            font-weight: 700;
+        }
+
+        /* 章节标题样式优化 */
+        .chapter {
+            font-family: 'Noto Serif SC', serif;
+            font-size: 24px;
+            margin-top: 20px;
+            margin-bottom: 10px;
+            color: #34495e;
+            cursor: pointer;
+            padding: 10px 15px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            border-radius: 6px;
+            transition: all 0.2s ease;
+            background-color: #f8f9fa;
+            border-left: 4px solid #3498db;
+        }
+        
+        .chapter:hover {
+            background-color: #edf2f7;
+            transform: translateX(5px);
+        }
+        
+        .toggle-icon {
+            margin-left: 10px;
+            font-size: 16px;
+            transition: transform 0.3s;
+        }
+
+        /* 侧边栏折叠时内容区域居中显示 */
+        .sidebar.collapsed + .content-area {
+            margin-left: 0;
+            max-width: 100%;
+            padding-left: 60px; /* 为折叠按钮留出空间 */
+        }
+
+        /* 笔记列表 */
+        .notes-list li {
+            padding: 12px 15px;
+            cursor: pointer;
+            border-radius: 6px;
+            transition: all 0.3s ease;
+            display: flex;
+            align-items: center;
+            margin-bottom: 5px;
+            font-size: 15px;
+        }
+
+        .notes-list li:hover {
+            background-color: #f5f7fa;
+            transform: translateX(5px);
+        }
+
+        .active {
+            background-color: #e3f2fd;
+            color: #1565c0;
+            font-weight: 500;
+        }
+        
+        /* 笔记目录标题 */
+        .sidebar h2 {
+            margin-bottom: 20px;
+            padding-bottom: 15px;
+            border-bottom: 1px solid #ecf0f1;
+            color: #2c3e50;
+            font-family: 'Noto Serif SC', serif;
+            font-size: 22px;
+        }
+        
+        /* 内容显示相关样式 */
+        .chapter-content {
+            max-width: 800px;
+            margin: 0 auto 30px;
+            padding: 20px 30px;
+            display: none; /* 默认隐藏 */
+            background-color: #fff;
+            border-radius: 8px;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.05);
+            border: 1px solid #ecf0f1;
+        }
+
+        /* 图片自适应样式 */
+        .content-image {
+            max-width: 100%;
+            height: auto;
+            margin: 20px 0;
+            border-radius: 8px;
+            box-shadow: 0 3px 10px rgba(0, 0, 0, 0.1);
+            display: block;
+        }
+
+        /* 内容格式化容器 */
+        .content-formatter {
+            font-size: 16px;
+            line-height: 1.8;
+            color: #333;
+        }
+
+        /* 语言切换器优化 */
+        .lang-switcher {
+            position: fixed;
+            top: 25px;
+            right: 25px;
+            z-index: 1000;
+            display: flex;
+            align-items: center;
+            background-color: white;
+            border-radius: 6px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+            padding: 8px 15px;
+            transition: all 0.2s ease;
+        }
+        
+        .lang-switcher:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+        }
+        
+        .lang-icon {
+            margin-right: 10px;
+            color: #3498db;
+        }
+
+        .lang-select {
+            padding: 8px 12px;
+            border: 1px solid #e0e0e0;
+            background: white;
+            cursor: pointer;
+            border-radius: 4px;
+            outline: none;
+            font-family: 'Noto Sans SC', sans-serif;
+            font-size: 14px;
+            transition: all 0.2s ease;
+        }
+        
+        .lang-select:focus {
+            border-color: #3498db;
+            box-shadow: 0 0 0 2px rgba(52, 152, 219, 0.2);
+        }
+        
+        /* 内容排版样式优化 */
+        .content-formatter h1, 
+        .content-formatter h2, 
+        .content-formatter h3 {
+            font-family: 'Noto Serif SC', serif;
+            margin: 1.5em 0 0.8em;
+            color: #2c3e50;
+            line-height: 1.4;
+        }
+        
+        .content-formatter h1 {
+            font-size: 28px;
+            border-bottom: 2px solid #ecf0f1;
+            padding-bottom: 10px;
+        }
+        
+        .content-formatter h2 {
+            font-size: 24px;
+        }
+        
+        .content-formatter h3 {
+            font-size: 20px;
+        }
+        
+        .content-formatter p {
+            margin: 0 0 1.2em 0;
+            line-height: 1.8;
+        }
+
+        .content-formatter ul, 
+        .content-formatter ol {
+            margin: 0 0 1.2em 0;
+            padding-left: 2em;
+        }
+
+        .content-formatter ul li, 
+        .content-formatter ol li {
+            margin-bottom: 0.5em;
+            line-height: 1.7;
+        }
+        
+        .content-formatter a {
+            color: #3498db;
+            text-decoration: none;
+            border-bottom: 1px solid transparent;
+            transition: all 0.2s ease;
+        }
+        
+        .content-formatter a:hover {
+            color: #2980b9;
+            border-bottom-color: #2980b9;
+        }
+        
+        .content-formatter code {
+            background-color: #f8f9fa;
+            padding: 2px 5px;
+            border-radius: 3px;
+            font-family: monospace;
+            font-size: 0.9em;
+            color: #e74c3c;
+        }
+        
+        .content-formatter pre {
+            background-color: #f8f9fa;
+            padding: 15px;
+            border-radius: 5px;
+            overflow-x: auto;
+            margin: 1.2em 0;
+            border: 1px solid #ecf0f1;
+        }
+        
+        .content-formatter pre code {
+            background-color: transparent;
+            padding: 0;
+            color: #333;
+            font-size: 0.9em;
+            line-height: 1.6;
+        }
+        
+        .content-formatter blockquote {
+            border-left: 4px solid #3498db;
+            padding: 10px 15px;
+            margin: 1.2em 0;
+            background-color: #f8f9fa;
+            color: #555;
+            font-style: italic;
+        }
+        
+        /* 章节内容容器 */
+        #chaptersContainer {
+            padding: 10px 0;
+            max-width: 850px;
+            margin: 0 auto;
+        }
+
+        /* 加载指示器 */
+        .loading {
+            display: inline-block;
+            width: 24px;
+            height: 24px;
+            border: 3px solid rgba(52, 152, 219, 0.2);
+            border-radius: 50%;
+            border-top-color: #3498db;
+            animation: spin 1s ease-in-out infinite;
+            margin: 20px auto;
+            display: block;
+        }
+
+        @keyframes spin {
+            to { transform: rotate(360deg); }
+        }
+        
+        /* 视频卡片样式 - 紧凑版 */
+        .video-card {
+            display: flex;
+            align-items: center;
+            background-color: #fff;
+            border-radius: 4px;
+            margin-bottom: 8px;
+            transition: all 0.2s ease;
+            border-left: 3px solid #3498db;
+            padding: 8px 12px;
+        }
+        
+        .video-card:hover {
+            background-color: #f5f9ff;
+        }
+        
+        .video-icon {
+            color: #3498db;
+            font-size: 16px;
+            margin-right: 12px;
+        }
+        
+        .video-content {
+            flex-grow: 1;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            flex-wrap: wrap;
+        }
+        
+        .video-title {
+            font-size: 14px;
+            font-weight: 500;
+            color: #2c3e50;
+            margin: 0;
+            flex: 1;
+            min-width: 200px;
+            padding-right: 10px;
+        }
+        
+        .video-link {
+            color: #3498db;
+            font-size: 13px;
+            text-decoration: none;
+            white-space: nowrap;
+            transition: all 0.2s ease;
+        }
+        
+        .video-link:hover {
+            color: #2980b9;
+            text-decoration: underline;
+        }
+        
+        .video-link i {
+            margin-left: 4px;
+            font-size: 11px;
+        }
+         /* 视频网格布局 */
+         .video-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+            gap: 15px;
+            margin: 20px 0;
+        }
+        
+        .video-grid .video-card {
+            display: flex;
+            flex-direction: column;
+            align-items: flex-start;
+            height: 100%;
+            margin-bottom: 0;
+        }
+        
+        .video-grid .video-icon {
+            align-self: flex-start;
+            margin-bottom: 8px;
+        }
+        
+        .video-grid .video-content {
+            width: 100%;
+            flex-direction: column;
+            align-items: flex-start;
+        }
+        
+        .video-grid .video-title {
+            margin-bottom: 8px;
+            padding-right: 0;
+        }
+        /* 响应式设计 */
+        @media (max-width: 1200px) {
+            .content-area {
+                padding: 30px;
+            }
+            
+            .chapter-content {
+                padding: 15px 25px;
+            }
+            
+            .video-grid {
+                grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+            }
+        }
+        
+        @media (max-width: 768px) {
+            .sidebar {
+                width: 240px;
+            }
+            
+            .content-area {
+                margin-left: 240px;
+                max-width: calc(100% - 240px);
+                padding: 20px;
+            }
+            
+            .sidebar.collapsed + .content-area {
+                padding-left: 50px;
+            }
+            
+            .note-title {
+                font-size: 30px;
+            }
+            
+            .chapter {
+                font-size: 20px;
+                padding: 8px 12px;
+            }
+            
+            .chapter-content {
+                padding: 15px 20px;
+            }
+            
+            .video-grid {
+                grid-template-columns: 1fr;
+            }
+            
+            .video-card {
+                flex-wrap: wrap;
+            }
+            
+            .video-title {
+                width: 100%;
+                margin-bottom: 5px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="lang-switcher">
+        <i class="fas fa-globe lang-icon"></i>
+        <select class="lang-select" onchange="changeLanguage(this.value)">
+            <option value="zh">中文</option>
+            <option value="en">EN</option>
+            <option value="ja">日本語</option>
+        </select>
+    </div>
+
+    <!-- 侧边栏 -->
+    <div class="sidebar" id="sidebar">
+        <h2 id="notesDirectory">学习笔记目录</h2>
+        <div class="collapse-btn" onclick="toggleSidebar()">
+            <i class="fas fa-chevron-left"></i>
+        </div>
+        <ul class="notes-list" id="notesList"></ul>
+    </div>
+
+    <!-- 内容区域 -->
+    <div class="content-area" id="contentArea">
+        <div id="chaptersContainer"></div>
+    </div>
+
+    <!-- 引入Markdown加载和笔记结构文件 -->
+    <script src="js/markdown-loader.js"></script>
+    <script src="js/note-structure.js"></script>
+    
+    <script>
+        // 侧边栏折叠/展开功能
+        function toggleSidebar() {
+            const sidebar = document.getElementById('sidebar');
+            const collapseBtn = sidebar.querySelector('.collapse-btn i');
+            
+            if (sidebar.classList.contains('collapsed')) {
+                sidebar.classList.remove('collapsed');
+                collapseBtn.className = 'fas fa-chevron-left';
+            } else {
+                sidebar.classList.add('collapsed');
+                collapseBtn.className = 'fas fa-chevron-right';
+            }
+        }
+
+        let currentLang = 'zh';
+        let currentNote = 'note1';
+        let activeNoteElement = null;
+        
+        function init() {
+            renderNotesList();
+            showNote(currentNote);
+        }
+        
+        function renderNotesList() {
+            const list = document.getElementById('notesList');
+            const directoryTitle = document.getElementById('notesDirectory');
+            directoryTitle.innerText = noteStructure[currentLang]['notesDirectory'];
+            
+            list.innerHTML = Object.keys(noteStructure[currentLang]['notes']).map(noteId => `
+                <li id="note-${noteId}" onclick="showNote('${noteId}')">
+                    <i class="fas fa-book-open" style="margin-right: 12px;"></i>
+                    ${noteStructure[currentLang]['notes'][noteId].title}
+                </li>
+            `).join('');
+            
+            // 高亮当前选中的笔记
+            if (currentNote) {
+                const noteElement = document.getElementById(`note-${currentNote}`);
+                if (noteElement) {
+                    noteElement.classList.add('active');
+                    activeNoteElement = noteElement;
+                }
+            }
+        }
+        
+        function changeLanguage(lang) {
+            currentLang = lang;
+            renderNotesList();
+            showNote(currentNote);
+        }
+        
+        // 修改后的showNote函数，从Markdown文件加载内容
+        async function showNote(noteId) {
+            // 移除之前的活动状态
+            if (activeNoteElement) {
+                activeNoteElement.classList.remove('active');
+            }
+            
+            // 设置新的活动状态
+            const noteElement = document.getElementById(`note-${noteId}`);
+            if (noteElement) {
+                noteElement.classList.add('active');
+                activeNoteElement = noteElement;
+            }
+            
+            currentNote = noteId;
+            const selectedNote = noteStructure[currentLang]['notes'][currentNote];
+            const chaptersContainer = document.getElementById('chaptersContainer');
+            
+            // 先显示笔记标题和章节标题结构
+            chaptersContainer.innerHTML = `
+                <div class="note-title">${selectedNote.title}</div>
+                ${selectedNote.chapters.map((chapter, index) => `
+                    <div class="chapter" onclick="toggleContent(${index})">
+                        ${chapter.title}
+                        <span class="toggle-icon"><i class="fas fa-chevron-down"></i></span>
+                    </div>
+                    <div class="chapter-content" id="chapterContent${index}">
+                        <div class="loading"></div>
+                    </div>
+                `).join('')}
+            `;
+            
+            // 默认展开第一个章节并加载其内容
+            if (selectedNote.chapters.length > 0) {
+                const firstContent = document.getElementById('chapterContent0');
+                if (firstContent) {
+                    firstContent.style.display = 'block';
+                    await loadChapterContent(0);
+                }
+            }
+        }
+        
+        // 加载章节内容的函数
+        async function loadChapterContent(index) {
+            const selectedNote = noteStructure[currentLang]['notes'][currentNote];
+            const chapterPath = selectedNote.chapters[index].path;
+            const contentElement = document.getElementById(`chapterContent${index}`);
+            
+            try {
+                // 使用XMLHttpRequest替代fetch以支持本地文件访问
+                const xhr = new XMLHttpRequest();
+                xhr.open('GET', chapterPath, true);
+                xhr.onreadystatechange = function() {
+                    if (xhr.readyState === 4) {
+                        if (xhr.status === 200 || xhr.status === 0) { // 0 for local files
+                            const markdownContent = xhr.responseText;
+                            const htmlContent = parseMarkdown(markdownContent);
+                            contentElement.innerHTML = `<div class="content-formatter">${htmlContent}</div>`;
+                        } else {
+                            contentElement.innerHTML = `<div class="content-formatter">加载内容失败: 无法读取文件</div>`;
+                            console.error('Error loading chapter content:', xhr.statusText);
+                        }
+                    }
+                };
+                xhr.send();
+            } catch (error) {
+                contentElement.innerHTML = `<div class="content-formatter">加载内容失败: ${error.message}</div>`;
+                console.error('Error loading chapter content:', error);
+            }
+        }
+        
+        function toggleContent(index) {
+            const content = document.getElementById(`chapterContent${index}`);
+            const icon = document.querySelectorAll('.chapter .toggle-icon i')[index];
+            
+            if (content.style.display === 'none' || !content.style.display) {
+                content.style.display = 'block';
+                icon.className = 'fas fa-chevron-up';
+                
+                // 如果内容还没加载，则加载内容
+                if (content.querySelector('.loading')) {
+                    loadChapterContent(index);
+                }
+            } else {
+                content.style.display = 'none';
+                icon.className = 'fas fa-chevron-down';
+            }
+        }
+        
+        window.onload = init;
+    </script>
+</body>
+</html>
