@@ -53,7 +53,7 @@ const noteStructure = {
                 chapters: [
                     { title: '一：警惕客体思维，学会为自己负责', path: 'content/zh/note4/chapter1.md' },
                     { title: '二：警惕打分思维，接纳多样的世界', path: 'content/zh/note4/chapter2.md' },
-                    { title: '第三章：更新中', path: 'content/zh/note4/chapter3.md' }
+                    { title: '三：(反思)让自己的大脑注重积累，而不是结果', path: 'content/zh/note4/chapter3.md' }
                 ]
             },
             'note5': {
